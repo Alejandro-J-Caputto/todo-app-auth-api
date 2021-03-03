@@ -10,9 +10,11 @@
   "author": "Alejandro Caputto",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.10",
     "@types/express": "^4.17.11",
-    "@types/node": "^14.14.31"
+    "@types/node": "^14.14.31",
+    "@types/validator": "^13.1.3"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
