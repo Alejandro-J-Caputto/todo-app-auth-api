@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.putUser = exports.postUser = exports.getUserById = exports.getUsers = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const user_1 = __importDefault(require("../models/user"));
+const catchAsync_1 = require("../utils/catchAsync");
 const getUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { limit = 5, from = 0 } = req.query;
     const users = user_1.default.find({ active: { $ne: false } }).limit(+limit).skip(+from);
@@ -41,7 +42,7 @@ const getUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     });
 });
 exports.getUsers = getUsers;
-const getUserById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getUserById = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.params.id;
     console.log(userId);
     const user = yield user_1.default.findById(userId);
@@ -52,8 +53,7 @@ const getUserById = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         message: 'Hello getUsers',
         user
     });
-});
-exports.getUserById = getUserById;
+}));
 // Creates an user without validation. Just use during developing process
 const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { name, email, password } = req.body;
@@ -62,7 +62,7 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const salt = bcryptjs_1.default.genSaltSync();
     newUser.password = bcryptjs_1.default.hashSync(password, salt);
     // CREATE DOCUMENT IN THE DB
-    yield newUser.save();
+    // await newUser.save();
     yield newUser.save();
     res.status(200).json({
         status: 'success',
@@ -86,6 +86,7 @@ const putUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.putUser = putUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // req.body.uid = 123
+    // console.log(req.body.uid)
     const changeStatus = yield user_1.default.findByIdAndUpdate(req.params.id, { active: false }, {
         new: true,
         runValidators: true

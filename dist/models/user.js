@@ -22,7 +22,7 @@ const UserSchema = new mongoose_1.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Please provide a valis password'],
+        required: [true, 'Please provide a valid password'],
         select: false
     }, img: {
         type: String

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import bcrypt from 'bcryptjs'
 import User from '../models/user'
+import { catchAsync } from "../utils/catchAsync";
 
 
 
@@ -24,7 +25,7 @@ export const getUsers = async (req:Request, res:Response, next:NextFunction) => 
 
 }
 
-export const getUserById = async (req:Request, res:  Response, next: NextFunction) => {
+export const getUserById = catchAsync(async (req:Request, res:  Response, next: NextFunction) => {
   const userId = req.params.id;
   console.log(userId)
   const user = await User.findById(userId);
@@ -34,7 +35,7 @@ export const getUserById = async (req:Request, res:  Response, next: NextFunctio
     message: 'Hello getUsers',
     user
   })
-}
+})
 
 // Creates an user without validation. Just use during developing process
 export const postUser = async (req:  Request, res:  Response) => {
@@ -49,7 +50,7 @@ export const postUser = async (req:  Request, res:  Response) => {
   newUser.password = bcrypt.hashSync( password, salt);
 
   // CREATE DOCUMENT IN THE DB
-  await newUser.save();
+  // await newUser.save();
   await newUser.save();
 
   res.status(200).json({
@@ -76,6 +77,7 @@ export const putUser = async (req:  Request, res:  Response) => {
 } 
 export const deleteUser = async (req: Request, res:  Response) => {
   // req.body.uid = 123
+  // console.log(req.body.uid)
   const changeStatus = await User.findByIdAndUpdate(req.params.id, {active : false}, {
     new: true,
     runValidators: true

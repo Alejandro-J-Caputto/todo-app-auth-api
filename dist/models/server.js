@@ -13,9 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
+//DB
 const connectionDB_1 = __importDefault(require("../database/connectionDB"));
+//Custom Error
+const appErr_1 = require("../utils/appErr");
+//Routing
 const userRoutes_1 = __importDefault(require("../routes/userRoutes"));
+const authRoutes_1 = __importDefault(require("../routes/authRoutes"));
 class Server {
     constructor() {
         this.apiPathEndpoints = {
@@ -30,14 +36,20 @@ class Server {
         this.connectionDB(process.env.ENVIROMENT);
         this.middlewares();
         this.routes();
+        this.errorHandlingMiddleware();
     }
     middlewares() {
         this.app.use(cors_1.default());
+        this.app.use(cookie_parser_1.default());
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.static('./src/public'));
     }
     routes() {
         this.app.use(this.apiPathEndpoints.users, userRoutes_1.default);
+        this.app.use(this.apiPathEndpoints.userAuth, authRoutes_1.default);
+        this.app.all('*', (req, res, next) => {
+            next(new appErr_1.AppError(`Can't find ${req.originalUrl} on this server`, 404));
+        });
     }
     connectionDB(env) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -47,6 +59,19 @@ class Server {
     listen() {
         this.app.listen(this.port, () => {
             console.log('Server running on port ' + this.port);
+        });
+    }
+    errorHandlingMiddleware() {
+        this.app.use((err, req, res, next) => {
+            err.statusCode = err.statusCode || 500;
+            err.status = err.status || 'error';
+            // if(process.env.ENVIROMENT_NOW === 'development') {
+            // }
+            res.status(err.statusCode).json({
+                // err: {...err, [err.message]:err.message},
+                status: err.status,
+                message: err.message
+            });
         });
     }
 }

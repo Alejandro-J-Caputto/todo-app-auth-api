@@ -1,5 +1,6 @@
 import validator from 'validator'
 import {Schema, model, mongo} from 'mongoose';
+import { UserModel } from '../interfaces/interfaces';
 
 
 const UserSchema = new Schema({
@@ -19,7 +20,7 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, 'Please provide a valis password'],
+    required: [true, 'Please provide a valid password'],
     select: false
   },img: {
     type: String
@@ -41,7 +42,7 @@ const UserSchema = new Schema({
 
 })
 
-const User = model('User', UserSchema);
+const User = model<UserModel>('User', UserSchema);
 
 
 export default User;
