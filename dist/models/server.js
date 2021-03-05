@@ -22,11 +22,19 @@ const appErr_1 = require("../utils/appErr");
 //Routing
 const userRoutes_1 = __importDefault(require("../routes/userRoutes"));
 const authRoutes_1 = __importDefault(require("../routes/authRoutes"));
+const workspaceRoutes_1 = __importDefault(require("../routes/workspaceRoutes"));
+const todoListRoutes_1 = __importDefault(require("../routes/todoListRoutes"));
+const todoRoutes_1 = __importDefault(require("../routes/todoRoutes"));
+const searchRoutes_1 = __importDefault(require("../routes/searchRoutes"));
 class Server {
     constructor() {
         this.apiPathEndpoints = {
             users: '/api/todoapp/v1/users',
-            userAuth: '/api/todoapp/v1/auth'
+            userAuth: '/api/todoapp/v1/auth',
+            boards: '/api/todoapp/v1/workspace',
+            todoList: '/api/todoapp/v1/todoList',
+            todo: '/api/todoapp/v1/todo',
+            search: '/api/todoapp/v1/search'
         };
         //Init express
         this.app = express_1.default();
@@ -47,6 +55,10 @@ class Server {
     routes() {
         this.app.use(this.apiPathEndpoints.users, userRoutes_1.default);
         this.app.use(this.apiPathEndpoints.userAuth, authRoutes_1.default);
+        this.app.use(this.apiPathEndpoints.boards, workspaceRoutes_1.default);
+        this.app.use(this.apiPathEndpoints.todoList, todoListRoutes_1.default);
+        this.app.use(this.apiPathEndpoints.todo, todoRoutes_1.default);
+        this.app.use(this.apiPathEndpoints.search, searchRoutes_1.default);
         this.app.all('*', (req, res, next) => {
             next(new appErr_1.AppError(`Can't find ${req.originalUrl} on this server`, 404));
         });

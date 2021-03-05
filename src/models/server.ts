@@ -8,6 +8,10 @@ import { AppError } from '../utils/appErr';
 //Routing
 import userRoutes from '../routes/userRoutes'
 import authRoutes from '../routes/authRoutes';
+import workspaceRoutes from '../routes/workspaceRoutes';
+import todoListRoutes from '../routes/todoListRoutes';
+import todoRoutes from '../routes/todoRoutes';
+import searchRoutes from '../routes/searchRoutes';
 
 class Server {
   
@@ -15,10 +19,18 @@ class Server {
   private port: string | number;
   private apiPathEndpoints: {
     users: string,
-    userAuth: string
+    userAuth: string,
+    boards: string,
+    todoList: string,
+    todo: string,
+    search: string
   } = {
     users: '/api/todoapp/v1/users',
-    userAuth: '/api/todoapp/v1/auth'
+    userAuth: '/api/todoapp/v1/auth',
+    boards:'/api/todoapp/v1/workspace',
+    todoList: '/api/todoapp/v1/todoList',
+    todo: '/api/todoapp/v1/todo',
+    search: '/api/todoapp/v1/search'
   }
   
   constructor() {
@@ -43,8 +55,12 @@ class Server {
 
   routes() {
     
-    this.app.use(this.apiPathEndpoints.users, userRoutes)
-    this.app.use(this.apiPathEndpoints.userAuth, authRoutes)
+    this.app.use(this.apiPathEndpoints.users, userRoutes);
+    this.app.use(this.apiPathEndpoints.userAuth, authRoutes);
+    this.app.use(this.apiPathEndpoints.boards, workspaceRoutes);
+    this.app.use(this.apiPathEndpoints.todoList, todoListRoutes);
+    this.app.use(this.apiPathEndpoints.todo, todoRoutes);
+    this.app.use(this.apiPathEndpoints.search, searchRoutes);
 
 
     this.app.all('*',(req,res,next) => {

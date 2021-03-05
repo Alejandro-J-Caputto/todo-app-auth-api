@@ -15,6 +15,32 @@ active?: boolean,
 google?: boolean
 }
 
+export interface WorkspaceInterface extends Document {
+  id?:string,
+  title?:string,
+  date?: string,
+  todoLists?: string[],
+  user?: string
+}
+
+export interface TodoListInterface extends Document {
+id?:string,
+name?:string,
+date?:string,
+active?:string,
+todos?:string[],
+project?:string,
+user?:string,
+}
+export interface TodoInterface extends Document {
+id?:string,
+todo?:string,
+date?:string,
+todoList?:string,
+done?:boolean,
+user?:string,
+}
+
 // export interface AuthUid extends JwtHeader {
 //   uid?:string;
 // }

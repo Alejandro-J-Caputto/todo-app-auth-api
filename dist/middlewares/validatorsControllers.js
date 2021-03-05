@@ -56,8 +56,8 @@ const checkEmailExists = (req, res, next) => __awaiter(void 0, void 0, void 0, f
 exports.checkEmailExists = checkEmailExists;
 exports.validateJWT = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token;
-    console.log(req.headers.cookie);
-    console.log(req.cookies);
+    // console.log(req.headers.cookie)
+    // console.log(req.cookies)
     if (req.header('Authorization')) {
         token = req.header('Authorization').split(' ')[1];
     }
