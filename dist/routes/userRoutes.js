@@ -6,6 +6,8 @@ const validatorsControllers_1 = require("../middlewares/validatorsControllers");
 const router = express_1.Router();
 router.get('/', [], userController_1.getUsers);
 router.post('/', [], userController_1.postUser);
+router.patch('/', [], validatorsControllers_1.validateJWT, validatorsControllers_1.checkPasswordSimple, validatorsControllers_1.checkEmailExistsProfile, userController_1.patchUser);
+router.patch('/resetPass', [], validatorsControllers_1.validateJWT, validatorsControllers_1.checkPassword, validatorsControllers_1.checkResetPass, userController_1.patchPassword);
 router.get('/:id', [], userController_1.getUserById);
 router.put('/:id', [], userController_1.putUser);
 router.delete('/:id', [validatorsControllers_1.validateJWT], userController_1.deleteUser);

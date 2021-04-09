@@ -10,9 +10,9 @@ const router = Router();
 
 
 //ENDPOINT FOR DEVELOPMENT
-router.get('/', getWorkspace);
+router.get('/',validateJWT, getWorkspace);
 router.get('/:id', getWorkspaceById);
-router.post('/', createWorkspace);
+router.post('/', validateJWT, createWorkspace);
 router.patch('/', patchWorkspace);
 router.patch('/', deleteWorkspace);
 

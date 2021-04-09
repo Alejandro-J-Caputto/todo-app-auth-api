@@ -20,12 +20,14 @@ export const login = catchAsync(async(req:Request, res:Response, next: NextFunct
   const {email, password} = req.body;
 
   const user = await User.findOne({email}).select('+password +active');
-
+  console.log('user')
   if(!user) return next(new AppError(`This email ${email} doesnt exist on our DB`, 404));
 
   if(user.active === false) return next(new AppError(`This user is not active anymore`, 404));
   //check if the password matches the stored password in the DB
-  if(!bcryptjs.compare(password, user.password!)) {
+  if(await bcryptjs.compare(password, user.password!) === false) {
+    console.log(password)
+    console.log(user.password)
     return next(new AppError(`The password is not correct`, 400));
   }
 
@@ -62,7 +64,8 @@ export const singIn = catchAsync(async(req:Request, res: Response, next: NextFun
   res.status(200).json({
     status: 'success',
     message: 'User succesfully created',
-    token
+    token,
+    newUser
   })
 
 })
@@ -76,4 +79,18 @@ export const logOut = catchAsync(async(req:Request, res: Response, next: NextFun
   res.status(200).json({
       status: 'success'
   })
+})
+
+export const renewToken = catchAsync(async(req:Request, res: Response, next: NextFunction) => {
+
+  const { uid }= req.body;
+
+  const user = await User.findById(uid);
+
+  res.status(200).json({
+    status: 'success',
+    user
+  })
+
+
 })

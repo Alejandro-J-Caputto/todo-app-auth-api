@@ -75,6 +75,48 @@ export const putUser = async (req:  Request, res:  Response) => {
   })
 
 } 
+export const patchUser = async (req:  Request, res:  Response) => {
+
+  console.log('he llegado aqui')
+
+  const {uid,password,...rest} = req.body;
+  // if(rest.password) {
+  //   const salt = bcrypt.genSaltSync();
+  //   rest.password = bcrypt.hashSync(rest.password, salt);
+  // }
+  
+  const updatedUser = await User.findByIdAndUpdate(uid, rest, {
+    new: true,
+    runValidators: true
+  })
+
+  res.status(200).json({
+    status: 'success',
+    updatedUser
+  })
+
+} 
+export const patchPassword = async (req:  Request, res:  Response) => {
+
+  console.log('he llegado aqui')
+
+  const {uid,...rest} = req.body;
+
+  if(rest.passwordReset) {
+    const salt = bcrypt.genSaltSync();
+    rest.password = bcrypt.hashSync(rest.passwordReset, salt);
+  }
+  const updatedUser = await User.findByIdAndUpdate(uid, rest, {
+    new: true,
+    runValidators: true
+  })
+
+  res.status(200).json({
+    status: 'success',
+    updatedUser
+  })
+
+} 
 export const deleteUser = async (req: Request, res:  Response) => {
   // req.body.uid = 123
   // console.log(req.body.uid)

@@ -20,7 +20,8 @@ export interface WorkspaceInterface extends Document {
   title?:string,
   date?: string,
   todoLists?: string[],
-  user?: string
+  user?: string,
+  img?:string
 }
 
 export interface TodoListInterface extends Document {
@@ -44,3 +45,8 @@ user?:string,
 // export interface AuthUid extends JwtHeader {
 //   uid?:string;
 // }
+
+export interface MyReq extends Request {
+  files?: any;
+  file?: any;
+}

@@ -13,6 +13,10 @@ const WorkspaceSchema = new mongoose_1.Schema({
         type: Date,
         default: new Date().getDate()
     },
+    img: {
+        type: String,
+        required: [true, 'A theme is required']
+    },
     // todoLists: [{
     //   type: Schema.Types.ObjectId,
     //   ref: 'TodoList',

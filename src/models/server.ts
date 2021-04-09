@@ -1,6 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cookie from 'cookie-parser';
 import cors from 'cors';
+import fileUpload from 'express-fileupload';
 //DB
 import connectionDB from '../database/connectionDB';
 //Custom Error
@@ -12,6 +13,7 @@ import workspaceRoutes from '../routes/workspaceRoutes';
 import todoListRoutes from '../routes/todoListRoutes';
 import todoRoutes from '../routes/todoRoutes';
 import searchRoutes from '../routes/searchRoutes';
+import uploadsRoutes from '../routes/uploadRoutes'
 
 class Server {
   
@@ -23,14 +25,16 @@ class Server {
     boards: string,
     todoList: string,
     todo: string,
-    search: string
+    search: string,
+    uploadFile: string
   } = {
     users: '/api/todoapp/v1/users',
     userAuth: '/api/todoapp/v1/auth',
     boards:'/api/todoapp/v1/workspace',
     todoList: '/api/todoapp/v1/todoList',
     todo: '/api/todoapp/v1/todo',
-    search: '/api/todoapp/v1/search'
+    search: '/api/todoapp/v1/search',
+    uploadFile: '/api/todoapp/v1/upload'
   }
   
   constructor() {
@@ -51,6 +55,11 @@ class Server {
     this.app.use(cookie());
     this.app.use(express.json());
     this.app.use(express.static('./src/public'));
+    this.app.use(fileUpload({
+      useTempFiles : true,
+      tempFileDir : '/tmp/',
+      createParentPath: true
+  }));
   }
 
   routes() {
@@ -61,6 +70,7 @@ class Server {
     this.app.use(this.apiPathEndpoints.todoList, todoListRoutes);
     this.app.use(this.apiPathEndpoints.todo, todoRoutes);
     this.app.use(this.apiPathEndpoints.search, searchRoutes);
+    this.app.use(this.apiPathEndpoints.uploadFile, uploadsRoutes);
 
 
     this.app.all('*',(req,res,next) => {

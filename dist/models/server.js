@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
 //DB
 const connectionDB_1 = __importDefault(require("../database/connectionDB"));
 //Custom Error
@@ -26,6 +27,7 @@ const workspaceRoutes_1 = __importDefault(require("../routes/workspaceRoutes"));
 const todoListRoutes_1 = __importDefault(require("../routes/todoListRoutes"));
 const todoRoutes_1 = __importDefault(require("../routes/todoRoutes"));
 const searchRoutes_1 = __importDefault(require("../routes/searchRoutes"));
+const uploadRoutes_1 = __importDefault(require("../routes/uploadRoutes"));
 class Server {
     constructor() {
         this.apiPathEndpoints = {
@@ -34,7 +36,8 @@ class Server {
             boards: '/api/todoapp/v1/workspace',
             todoList: '/api/todoapp/v1/todoList',
             todo: '/api/todoapp/v1/todo',
-            search: '/api/todoapp/v1/search'
+            search: '/api/todoapp/v1/search',
+            uploadFile: '/api/todoapp/v1/upload'
         };
         //Init express
         this.app = express_1.default();
@@ -51,6 +54,11 @@ class Server {
         this.app.use(cookie_parser_1.default());
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.static('./src/public'));
+        this.app.use(express_fileupload_1.default({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
     }
     routes() {
         this.app.use(this.apiPathEndpoints.users, userRoutes_1.default);
@@ -59,6 +67,7 @@ class Server {
         this.app.use(this.apiPathEndpoints.todoList, todoListRoutes_1.default);
         this.app.use(this.apiPathEndpoints.todo, todoRoutes_1.default);
         this.app.use(this.apiPathEndpoints.search, searchRoutes_1.default);
+        this.app.use(this.apiPathEndpoints.uploadFile, uploadRoutes_1.default);
         this.app.all('*', (req, res, next) => {
             next(new appErr_1.AppError(`Can't find ${req.originalUrl} on this server`, 404));
         });

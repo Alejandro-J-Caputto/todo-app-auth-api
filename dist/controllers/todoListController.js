@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTodoList = exports.patchTodoList = exports.getTodoListByBoardAndTodoListId = exports.getTodoListByBoard = exports.createTodoList = exports.getTodoListById = exports.getTodoList = void 0;
 const todolist_1 = __importDefault(require("../models/todolist"));
 const workspace_1 = __importDefault(require("../models/workspace"));
+const catchAsync_1 = require("../utils/catchAsync");
 const getTodoList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const todoList = yield todolist_1.default.find().populate('project', 'title _id').populate('user', 'name email id').populate('todos', 'todo done');
     res.status(200).json({
@@ -24,15 +25,18 @@ const getTodoList = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.getTodoList = getTodoList;
 const getTodoListById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    console.log(id);
+    const todoList = yield todolist_1.default.find({ project: id }).populate('project', 'title _id').populate('user', 'name email id').populate('todos', 'todo done');
     res.status(200).json({
         status: 'success',
-        message: 'TodoList created sucesfully',
+        todoList,
     });
 });
 exports.getTodoListById = getTodoListById;
 const createTodoList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, project, user } = req.body;
-    const newTodoList = new todolist_1.default({ name, project, user });
+    const { name, project, uid } = req.body;
+    const newTodoList = new todolist_1.default({ name, project, user: uid });
     yield newTodoList.save();
     res.status(200).json({
         status: 'success',
@@ -42,7 +46,9 @@ const createTodoList = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.createTodoList = createTodoList;
 const getTodoListByBoard = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('patata');
     const { board } = req.params;
+    console.log(board);
     //check if workspace exists
     const workspace = yield workspace_1.default.findById(board);
     if (workspace) {
@@ -55,9 +61,10 @@ const getTodoListByBoard = (req, res, next) => __awaiter(void 0, void 0, void 0,
     //if exits find the todolists
 });
 exports.getTodoListByBoard = getTodoListByBoard;
-const getTodoListByBoardAndTodoListId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getTodoListByBoardAndTodoListId = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { board, todoListId } = req.params;
     //check if workspace exists
+    console.log('aaaaaaaa');
     const workspace = yield workspace_1.default.findById(board);
     if (workspace) {
         const todoLists = yield todolist_1.default.findById(todoListId);
@@ -66,19 +73,28 @@ const getTodoListByBoardAndTodoListId = (req, res, next) => __awaiter(void 0, vo
             todoLists
         });
     }
+}));
+const patchTodoList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { name } = req.body;
+    console.log('this id', id);
+    console.log(name);
+    const updatedName = yield todolist_1.default.findByIdAndUpdate(id, { name: name }, { new: true, runValidators: true });
+    res.status(200).json({
+        status: 'success',
+        updatedName
+    });
 });
-exports.getTodoListByBoardAndTodoListId = getTodoListByBoardAndTodoListId;
-const patchTodoList = (req, res, next) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'Hello from todolist'
-    });
-};
 exports.patchTodoList = patchTodoList;
-const deleteTodoList = (req, res, next) => {
+const deleteTodoList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    console.log(id);
+    const deletedTodoList = yield todolist_1.default.findByIdAndDelete(id);
+    console.log(deletedTodoList);
     res.status(200).json({
         status: 'success',
-        message: 'Hello from todolist'
+        message: 'todolist sucesfully deleted',
+        deletedTodoList
     });
-};
+});
 exports.deleteTodoList = deleteTodoList;

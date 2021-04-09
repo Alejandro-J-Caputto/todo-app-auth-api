@@ -8,14 +8,15 @@ import {
   getTodoListByBoard,
   getTodoListByBoardAndTodoListId
 } from '../controllers/todoListController'
+import { validateJWT } from '../middlewares/validatorsControllers';
 
 const router = Router({mergeParams: true});
 
 
 router.get('/', getTodoList);
 router.get('/:id', getTodoListById);
-router.post('/', createTodoList);
-router.patch('/:id', patchTodoList);
+router.post('/', validateJWT, createTodoList);
+router.patch('/:id', validateJWT, patchTodoList);
 router.delete('/:id', deleteTodoList);
 
 

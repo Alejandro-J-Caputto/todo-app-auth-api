@@ -22,7 +22,8 @@ const UserSchema = new Schema({
     type: String,
     required: [true, 'Please provide a valid password'],
     select: false
-  },img: {
+  },
+  img: {
     type: String
   },
   role: {

@@ -15,13 +15,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteWorkspace = exports.patchWorkspace = exports.createWorkspace = exports.getWorkspaceById = exports.getWorkspace = void 0;
 const workspace_1 = __importDefault(require("../models/workspace"));
 const catchAsync_1 = require("../utils/catchAsync");
-exports.getWorkspace = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const workspace = yield workspace_1.default.find().populate('user', 'name email _id').populate('todoLists', 'name -project');
-    res.status(200).json({
-        status: 'success',
-        workspace
-    });
-}));
+const mongoose_1 = require("mongoose");
+const getWorkspace = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { uid } = req.body;
+        console.log('possible error', uid);
+        if (mongoose_1.Types.ObjectId.isValid(uid)) {
+            console.log('checked uid', uid);
+        }
+        console.log('uid', req.headers.authorization);
+        const workspace = yield workspace_1.default.find({ user: uid }).populate('user', 'name email _id').populate('todoLists', 'name -project _id');
+        // const workspace = await Workspace.find({user:req.headers.authorization}).populate('user', 'name email _id').populate('todoLists', 'name -project _id');
+        // const workspace = await Workspace.find().populate('user', 'name email _id');
+        // console.log(typeof uid)
+        console.log(workspace);
+        res.status(200).json({
+            status: 'success',
+            workspace
+        });
+    }
+    catch (err) {
+        console.log('catch', err);
+        next(err);
+    }
+});
+exports.getWorkspace = getWorkspace;
 exports.getWorkspaceById = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     res.status(200).json({
         status: 'success',
@@ -29,12 +47,16 @@ exports.getWorkspaceById = catchAsync_1.catchAsync((req, res, next) => __awaiter
     });
 }));
 exports.createWorkspace = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, user } = req.body;
-    const newWorkspace = new workspace_1.default({ title, user });
+    console.log(req.body);
+    const { title, img, uid } = req.body;
+    const newWorkspace = new workspace_1.default({ title, img, user: uid });
+    console.log(newWorkspace);
     yield newWorkspace.save();
+    const workspace = yield workspace_1.default.find({ user: uid }).populate('user', 'name email _id').populate('todoLists', 'name -project');
     res.status(201).json({
         status: 'success',
-        message: `Workspace ${newWorkspace.title} succesfully created`
+        message: `Workspace ${newWorkspace.title} succesfully created`,
+        workspace
     });
 }));
 exports.patchWorkspace = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

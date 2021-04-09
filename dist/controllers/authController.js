@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logOut = exports.singIn = exports.login = void 0;
+exports.renewToken = exports.logOut = exports.singIn = exports.login = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 //MODEL
 const user_1 = __importDefault(require("../models/user"));
@@ -25,12 +25,15 @@ exports.login = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, vo
     //Fields 
     const { email, password } = req.body;
     const user = yield user_1.default.findOne({ email }).select('+password +active');
+    console.log('user');
     if (!user)
         return next(new appErr_1.AppError(`This email ${email} doesnt exist on our DB`, 404));
     if (user.active === false)
         return next(new appErr_1.AppError(`This user is not active anymore`, 404));
     //check if the password matches the stored password in the DB
-    if (!bcryptjs_1.default.compare(password, user.password)) {
+    if ((yield bcryptjs_1.default.compare(password, user.password)) === false) {
+        console.log(password);
+        console.log(user.password);
         return next(new appErr_1.AppError(`The password is not correct`, 400));
     }
     const token = yield jwt_cookie_1.generateJWT(user._id);
@@ -57,7 +60,8 @@ exports.singIn = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, v
     res.status(200).json({
         status: 'success',
         message: 'User succesfully created',
-        token
+        token,
+        newUser
     });
 }));
 exports.logOut = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,5 +71,13 @@ exports.logOut = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, v
     });
     res.status(200).json({
         status: 'success'
+    });
+}));
+exports.renewToken = catchAsync_1.catchAsync((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { uid } = req.body;
+    const user = yield user_1.default.findById(uid);
+    res.status(200).json({
+        status: 'success',
+        user
     });
 }));

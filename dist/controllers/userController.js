@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.putUser = exports.postUser = exports.getUserById = exports.getUsers = void 0;
+exports.deleteUser = exports.patchPassword = exports.patchUser = exports.putUser = exports.postUser = exports.getUserById = exports.getUsers = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const user_1 = __importDefault(require("../models/user"));
 const catchAsync_1 = require("../utils/catchAsync");
@@ -84,6 +84,40 @@ const putUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.putUser = putUser;
+const patchUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('he llegado aqui');
+    const _b = req.body, { uid, password } = _b, rest = __rest(_b, ["uid", "password"]);
+    // if(rest.password) {
+    //   const salt = bcrypt.genSaltSync();
+    //   rest.password = bcrypt.hashSync(rest.password, salt);
+    // }
+    const updatedUser = yield user_1.default.findByIdAndUpdate(uid, rest, {
+        new: true,
+        runValidators: true
+    });
+    res.status(200).json({
+        status: 'success',
+        updatedUser
+    });
+});
+exports.patchUser = patchUser;
+const patchPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('he llegado aqui');
+    const _c = req.body, { uid } = _c, rest = __rest(_c, ["uid"]);
+    if (rest.passwordReset) {
+        const salt = bcryptjs_1.default.genSaltSync();
+        rest.password = bcryptjs_1.default.hashSync(rest.passwordReset, salt);
+    }
+    const updatedUser = yield user_1.default.findByIdAndUpdate(uid, rest, {
+        new: true,
+        runValidators: true
+    });
+    res.status(200).json({
+        status: 'success',
+        updatedUser
+    });
+});
+exports.patchPassword = patchPassword;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // req.body.uid = 123
     // console.log(req.body.uid)
