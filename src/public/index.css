@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before, 
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+  font-size: 1.6rem;
+  /* line-height: 1.7rem; */
+
+}
+body {
+  font-family: 'lato','Open Sans', sans-serif;
+  font-weight: 400;
+}
+
+
+.background {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: linear-gradient(105deg, #42a5f5,#0d47a1);
+  z-index: -5;
+}
+.header {
+  color: whitesmoke;
+  flex-direction: column;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+
+}
+.heading-primary {
+  padding: 3rem ;
+}
+.paragrah {
+  width: 70%;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.postman-link {
+  padding: 4rem;
+}
+
+.postman-logo {
+  width: 100px;
+  height: 100px;
+}
