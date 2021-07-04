@@ -31,6 +31,7 @@ const getTodoById = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 exports.getTodoById = getTodoById;
 const createTodo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { todo, todoList, uid } = req.body;
+    console.log(todo, todoList, uid);
     const newTodo = new todo_1.default({ todo, todoList, user: uid });
     yield newTodo.save();
     res.status(200).json({

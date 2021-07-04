@@ -72,6 +72,8 @@ export const singIn = catchAsync(async(req:Request, res: Response, next: NextFun
 
 export const logOut = catchAsync(async(req:Request, res: Response, next: NextFunction) => {
   
+  
+
   res.cookie('jwt-cookie-todo', 'loggedOut', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true

@@ -25,6 +25,7 @@ export const getTodoById = async (req: Request, res:Response, next: NextFunction
 export const createTodo = async (req: Request, res:Response, next: NextFunction) => {
 
   const {todo, todoList, uid } = req.body;
+  console.log(todo, todoList, uid);
   const newTodo = new Todo({todo, todoList, user:uid});
   await newTodo.save();
 

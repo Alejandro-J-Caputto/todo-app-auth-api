@@ -34,7 +34,7 @@ export const getTodoListById = async (req: Request, res:Response, next: NextFunc
 export const createTodoList = async (req: Request, res:Response, next: NextFunction) => {
 
   const {name, project, uid } = req.body;
-
+  
   const newTodoList = new TodoList({name, project, user:uid});
 
 

@@ -129,7 +129,7 @@ exports.validateJWT = catchAsync_1.catchAsync((req, res, next) => __awaiter(void
     // console.log(req.header('Authorization'))
     if (req.header('Authorization')) {
         token = req.header('Authorization').split(' ')[1];
-        console.log(token);
+        // console.log(token)
     }
     else if (req.cookies['jwt-cookie']) {
         token = req.cookies['jwt-cookie'];

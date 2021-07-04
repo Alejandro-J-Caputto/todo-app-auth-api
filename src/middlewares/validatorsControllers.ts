@@ -135,7 +135,7 @@ export const validateJWT = catchAsync(async (req:Request, res:Response , next: N
   // console.log(req.header('Authorization'))
   if(req.header('Authorization')) {
     token = req.header('Authorization')!.split(' ')[1];
-    console.log(token)
+    // console.log(token)
   } else if (req.cookies['jwt-cookie']) {
     token = req.cookies['jwt-cookie']
   }
