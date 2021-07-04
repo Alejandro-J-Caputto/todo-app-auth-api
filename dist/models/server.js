@@ -50,6 +50,7 @@ class Server {
         this.errorHandlingMiddleware();
     }
     middlewares() {
+        // this.app.use(allowCrossDomain)
         this.app.use(cors_1.default());
         this.app.use(cookie_parser_1.default());
         this.app.use(express_1.default.json());

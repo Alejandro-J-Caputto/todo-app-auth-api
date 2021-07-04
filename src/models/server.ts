@@ -51,6 +51,7 @@ class Server {
   }
 
   private middlewares() {
+    // this.app.use(allowCrossDomain)
     this.app.use(cors());
     this.app.use(cookie());
     this.app.use(express.json());
