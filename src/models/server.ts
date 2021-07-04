@@ -54,7 +54,7 @@ class Server {
     this.app.use(cors());
     this.app.use(cookie());
     this.app.use(express.json());
-    // this.app.use(express.static('./src/public'));
+    this.app.use(express.static('./dist/public'));
     this.app.use(fileUpload({
       useTempFiles : true,
       tempFileDir : '/tmp/',

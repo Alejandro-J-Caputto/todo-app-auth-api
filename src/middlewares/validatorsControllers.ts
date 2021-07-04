@@ -137,7 +137,7 @@ export const validateJWT = catchAsync(async (req:Request, res:Response , next: N
     token = req.header('Authorization')!.split(' ')[1];
     // console.log(token)
   } else if (req.cookies['jwt-cookie']) {
-    token = req.cookies['jwt-cookie']
+    token = req.cookies['jwt-cookie'];
   }
   if(!token) {
     return next(new AppError('Your are not logged in, please log in and try again', 401))

@@ -53,7 +53,7 @@ class Server {
         this.app.use(cors_1.default());
         this.app.use(cookie_parser_1.default());
         this.app.use(express_1.default.json());
-        // this.app.use(express.static('./src/public'));
+        this.app.use(express_1.default.static('./dist/public'));
         this.app.use(express_fileupload_1.default({
             useTempFiles: true,
             tempFileDir: '/tmp/',

@@ -129,7 +129,7 @@ export const deleteUser = async (req: Request, res:  Response) => {
     status: 'success',
     message: 'User have been deleted',
     changeStatus,
-    // IT comos by reference in the previous middleware
+    // IT comos by reference in the previous middleware.
     uid : req.body.uid
   })
 } 

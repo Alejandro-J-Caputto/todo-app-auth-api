@@ -10,4 +10,4 @@ dotenv.config({path: './src/config/config.env'});
 
 const server = new Server()
 
-server.listen();
+server.listen()

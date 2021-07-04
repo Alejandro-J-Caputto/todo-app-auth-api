@@ -129,7 +129,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         status: 'success',
         message: 'User have been deleted',
         changeStatus,
-        // IT comos by reference in the previous middleware
+        // IT comos by reference in the previous middleware.
         uid: req.body.uid
     });
 });

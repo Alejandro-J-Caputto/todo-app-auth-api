@@ -38,5 +38,5 @@ const TodoSchema = new Schema({
 
 const Todo = model<TodoInterface>('Todo', TodoSchema);
 
-export default Todo;
+export default Todo
 
